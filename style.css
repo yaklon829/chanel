@@ -60,22 +60,23 @@ body {
   font-size: 16px;
 }
 
-/* 星星照片牆 */
+/* 照片星星牆 */
 .star {
   position: absolute;
   border-radius: 50%;
   cursor: pointer;
   transition: transform 0.3s;
   box-shadow: 0 0 8px rgba(255,255,255,0.8);
-  animation: twinkle 2s infinite alternate;
   z-index: 5;
 }
-.star:hover { transform: scale(1.2); }
 
-/* 閃爍動畫 */
-@keyframes twinkle {
-  from { opacity: 0.6; }
-  to { opacity: 1; }
+/* 閃爍＋漂移動畫 */
+@keyframes twinkleMove {
+  0%   { opacity: 0.8; transform: translate(0, 0); }
+  25%  { opacity: 0.4; transform: translate(-2px, 1px); }
+  50%  { opacity: 1;   transform: translate(2px, -1px); }
+  75%  { opacity: 0.3; transform: translate(-1px, -2px); }
+  100% { opacity: 0.9; transform: translate(0, 0); }
 }
 
 /* 少女＋獨角獸前景圖 */
@@ -108,29 +109,6 @@ body {
 .fullscreen img {
   max-width: 90%;
   max-height: 90%;
-}
-
-/* ☄️ 流星特效 */
-.meteor {
-  position: absolute;
-  width: 2px;
-  height: 100px;
-  background: linear-gradient(to bottom, rgba(255,255,255,1), rgba(255,255,255,0));
-  transform: rotate(45deg);
-  animation: fall 2s linear forwards;
-  box-shadow: 0 0 8px rgba(255,255,255,0.8);
-  z-index: 9999;
-}
-
-@keyframes fall {
-  from {
-    transform: translate(-100px, 0) rotate(45deg);
-    opacity: 1;
-  }
-  to {
-    transform: translate(100vw, 200px) rotate(45deg);
-    opacity: 0;
-  }
 }
 
 /* 手機 RWD */
