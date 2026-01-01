@@ -52,6 +52,11 @@
       star.src = src;
       star.className = "star";
 
+      // 檢查圖片是否能載入 → 如果失敗就移除，不報錯
+      star.onerror = () => {
+        star.remove();
+      };
+
       const size = Math.floor(Math.random() * 20) + 20;
       star.style.width = size + "px";
 
