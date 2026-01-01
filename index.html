@@ -3,17 +3,14 @@
 <head>
   <meta charset="UTF-8">
   <title>萱恩居家清潔·收納整理師</title>
-  <!-- 這裡只放基本設定，CSS 我們之後分開寫 -->
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
-  <!-- 背景星空 -->
+  <!-- 背景星空圖 -->
   <div class="background">
     <img src="IMG/night_sky.jpg" class="sky-bg">
   </div>
-
-  <!-- 星星牆 + 流星特效 (由 JS 動態生成) -->
 
   <!-- 名片區塊 -->
   <div class="card">
@@ -29,18 +26,92 @@
     </div>
   </div>
 
-  <!-- 前景少女 + 獨角獸 -->
+  <!-- 少女＋獨角獸前景圖 -->
   <div class="foreground">
-    <img src="IMG/girl.png" class="character">
-    <img src="IMG/unicorn.png" class="character">
+    <img src="IMG/girl_unicorn.png" class="character">
   </div>
 
-  <!-- 全螢幕顯示容器 -->
+  <!-- 全螢幕照片顯示容器 -->
   <div id="fullscreen" class="fullscreen" style="display:none;">
     <img id="fullscreen-img" src="">
   </div>
 
-  <!-- JS 控制星星牆、流星特效 -->
-  <script src="script.js"></script>
+  <!-- 星星牆與流星特效 -->
+  <script>
+    const photos = [];
+    for (let i = 1; i <= 45; i++) {
+      photos.push(`IMG/photo${i}.jpg`);
+    }
+
+    const card = document.querySelector('.card');
+    const rect = card.getBoundingClientRect();
+
+    photos.forEach(src => {
+      const star = document.createElement("img");
+      star.src = src;
+      star.className = "star";
+
+      const size = Math.floor(Math.random() * 40) + 30;
+      star.style.width = size + "px";
+
+      let top, left;
+      do {
+        top = Math.random() * window.innerHeight;
+        left = Math.random() * window.innerWidth;
+      } while (
+        top > rect.top && top < rect.bottom &&
+        left > rect.left && left < rect.right
+      );
+
+      star.style.top = top + "px";
+      star.style.left = left + "px";
+
+      const depth = Math.random();
+      star.style.opacity = 0.5 + depth * 0.5;
+      star.style.zIndex = Math.floor(depth * 5) + 1;
+
+      const duration = (Math.random() * 1.5 + 1.5).toFixed(1);
+      star.style.animation = `twinkle ${duration}s infinite alternate`;
+
+      const colors = ["#ffffff", "#aaccff", "#fff4c2"];
+      star.style.filter = `drop-shadow(0 0 6px ${colors[Math.floor(Math.random()*colors.length)]})`;
+
+      document.body.appendChild(star);
+
+      star.addEventListener("click", () => {
+        document.getElementById("fullscreen-img").src = src;
+        document.getElementById("fullscreen").style.display = "flex";
+      });
+    });
+
+    document.getElementById("fullscreen").addEventListener("click", () => {
+      document.getElementById("fullscreen").style.display = "none";
+    });
+
+    function createMeteor() {
+      const meteor = document.createElement("div");
+      meteor.style.position = "fixed";
+      meteor.style.top = Math.random() * window.innerHeight * 0.4 + "px";
+      meteor.style.left = "-100px";
+      meteor.style.width = "2px";
+      meteor.style.height = "80px";
+      meteor.style.background = "white";
+      meteor.style.transform = "rotate(45deg)";
+      meteor.style.opacity = "0.9";
+      meteor.style.boxShadow = "0 0 12px rgba(255,255,255,0.8)";
+      meteor.style.transition = "all 1.5s linear";
+      meteor.style.zIndex = "999";
+      document.body.appendChild(meteor);
+
+      setTimeout(() => {
+        meteor.style.left = window.innerWidth + "px";
+        meteor.style.top = parseInt(meteor.style.top) + 200 + "px";
+        meteor.style.opacity = "0";
+      }, 50);
+
+      setTimeout(() => meteor.remove(), 2000);
+    }
+    setInterval(createMeteor, 10000);
+  </script>
 </body>
 </html>
