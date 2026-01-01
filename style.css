@@ -120,28 +120,7 @@ body {
   max-height: 90%;
 }
 
-/* 背景音樂按鈕 */
-#toggle-music {
-  position: fixed;
-  top: 20px;
-  right: 20px;
-  padding: 8px 14px;
-  background: rgba(255, 255, 255, 0.2);
-  color: #fff;
-  border: none;
-  border-radius: 6px;
-  cursor: pointer;
-  font-size: 14px;
-  backdrop-filter: blur(4px);
-  z-index: 9999;
-  transition: background 0.3s, transform 0.2s;
-}
-#toggle-music:hover {
-  background: rgba(255, 255, 255, 0.4);
-  transform: scale(1.1);
-}
-
-/* 手機版優化：按鈕移到右下角並縮小 */
+/* 手機版優化 */
 @media (max-width: 768px) {
   .info h1 { font-size: 22px; }
   .info p, .info a { font-size: 16px; }
@@ -149,11 +128,4 @@ body {
   .info { text-align: center; }
   .logo { width: 100px; }
   .card { max-width: 85%; } /* 手機版名片稍微縮小 */
-  #toggle-music {
-    top: auto;
-    bottom: 20px;
-    right: 20px;
-    font-size: 12px;
-    padding: 6px 10px;
-  }
 }
