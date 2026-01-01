@@ -45,14 +45,14 @@
 
     const card = document.querySelector('.card');
     const rect = card.getBoundingClientRect();
-    const placedStars = []; // ⭐ 記錄已放置星星，避免重疊
+    const placedStars = [];
 
     photos.forEach(src => {
       const star = document.createElement("img");
       star.src = src;
       star.className = "star";
 
-      const size = Math.floor(Math.random() * 20) + 20; // ⭐ 縮小尺寸 20~40px
+      const size = Math.floor(Math.random() * 20) + 20; // ⭐ 20~40px
       star.style.width = size + "px";
 
       let top, left;
@@ -60,12 +60,9 @@
         top = Math.random() * window.innerHeight;
         left = Math.random() * window.innerWidth;
       } while (
-        // 避開名片區塊
         (top > rect.top && top < rect.bottom &&
          left > rect.left && left < rect.right) ||
-        // 避開底部 30% (少女＋草地＋獨角獸區域)
         top > window.innerHeight * 0.7 ||
-        // 避免星星重疊
         placedStars.some(s => Math.abs(s.top - top) < 50 && Math.abs(s.left - left) < 50)
       );
       placedStars.push({top, left});
@@ -95,42 +92,14 @@
       document.getElementById("fullscreen").style.display = "none";
     });
 
-    // ☄️ 流星特效 (亮點 + 殘影)
+    // ☄️ 流星特效 (CSS 控制動畫)
     function createMeteor() {
       const meteor = document.createElement("div");
-      meteor.style.position = "fixed";
+      meteor.className = "meteor";
       meteor.style.top = Math.random() * window.innerHeight * 0.4 + "px";
-      meteor.style.left = "-50px";
-      meteor.style.width = "10px";
-      meteor.style.height = "10px";
-      meteor.style.borderRadius = "50%";
-      meteor.style.background = "white";
-      meteor.style.boxShadow = "0 0 12px rgba(255,255,255,0.9)";
-      meteor.style.zIndex = "9999"; // 🚀 保證在最上層
-
-      // 殘影
-      const trail = document.createElement("div");
-      trail.style.position = "absolute";
-      trail.style.top = "0";
-      trail.style.left = "-5px";
-      trail.style.width = "5px";
-      trail.style.height = "40px"; // 殘影長度
-      trail.style.background = "linear-gradient(to bottom, rgba(255,255,255,0.8), transparent)";
-      trail.style.transform = "rotate(45deg)";
-      meteor.appendChild(trail);
-
       document.body.appendChild(meteor);
 
-      // 移動動畫
-      meteor.style.transition = "all 2s linear";
-      setTimeout(() => {
-        meteor.style.left = window.innerWidth + "px";
-        meteor.style.top = parseInt(meteor.style.top) + 200 + "px";
-        meteor.style.opacity = "0";
-      }, 50);
-
-      // 移除
-      setTimeout(() => meteor.remove(), 2200);
+      setTimeout(() => meteor.remove(), 2000);
     }
 
     // 🚀 載入時先跑一顆流星
