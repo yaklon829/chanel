@@ -36,10 +36,14 @@
     <img id="fullscreen-img" src="">
   </div>
 
+  <!-- 背景音樂 -->
+  <audio id="bg-music" src="sound/bg-music.mp3" autoplay loop></audio>
+  <button id="toggle-music">🔇 靜音/播放</button>
+
   <!-- 星星牆特效 -->
   <script>
     const photos = [];
-    for (let i = 1; i <= 30; i++) { // ⭐ 照片數量
+    for (let i = 1; i <= 30; i++) { // ⭐ 照片數量維持 30%
       photos.push(`IMG/photo${i}.jpg`);
     }
 
@@ -75,16 +79,44 @@
       const delay = (Math.random() * 5).toFixed(1); // 0~5秒
       star.style.animation = `twinkleMove ${duration}s infinite ease-in-out ${delay}s`;
 
+      // ⭐ 顏色濾鏡隨機化
+      const colors = ["#ffffff", "#aaccff", "#fff4c2"];
+      star.style.filter = `drop-shadow(0 0 6px ${colors[Math.floor(Math.random()*colors.length)]})`;
+
       document.body.appendChild(star);
 
+      // 點擊照片 → 全螢幕顯示 + 音效
       star.addEventListener("click", () => {
         document.getElementById("fullscreen-img").src = src;
         document.getElementById("fullscreen").style.display = "flex";
+        new Audio("sound/click.mp3").play(); // ⭐ 點擊音效
       });
     });
 
     document.getElementById("fullscreen").addEventListener("click", () => {
       document.getElementById("fullscreen").style.display = "none";
+    });
+
+    // 🎶 背景音樂控制
+    const bgMusic = document.getElementById("bg-music");
+    const toggleBtn = document.getElementById("toggle-music");
+    toggleBtn.addEventListener("click", () => {
+      if (bgMusic.muted) {
+        bgMusic.muted = false;
+        toggleBtn.textContent = "🔇 靜音/播放";
+      } else {
+        bgMusic.muted = true;
+        toggleBtn.textContent = "🔊 播放中";
+      }
+    });
+
+    // 🖱️ 滑鼠移動星空 → 視差效果
+    document.addEventListener("mousemove", e => {
+      const moveX = (e.clientX / window.innerWidth - 0.5) * 20;
+      const moveY = (e.clientY / window.innerHeight - 0.5) * 20;
+      document.querySelectorAll(".star").forEach(star => {
+        star.style.transform = `translate(${moveX}px, ${moveY}px)`;
+      });
     });
   </script>
 </body>
