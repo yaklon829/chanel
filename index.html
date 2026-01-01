@@ -3,117 +3,17 @@
 <head>
   <meta charset="UTF-8">
   <title>萱恩居家清潔·收納整理師</title>
-  <style>
-    body {
-      margin: 0;
-      background: linear-gradient(to bottom, #0b1d4d 0%, #000000 100%);
-      color: #fff;
-      font-family: "Noto Sans TC", sans-serif;
-      overflow: hidden;
-    }
-
-    /* 名片區塊 */
-    .card {
-      position: absolute;
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%);
-      background: rgba(255, 255, 255, 0.1);
-      padding: 20px 40px;
-      border-radius: 12px;
-      backdrop-filter: blur(6px);
-      z-index: 20;
-      max-width: 90%;
-    }
-    .logo-row {
-      display: flex;
-      align-items: center;
-      gap: 20px;
-      flex-wrap: wrap;
-      justify-content: center;
-    }
-    .logo {
-      width: 100px;
-      height: auto;
-      border-radius: 50%;
-    }
-    .info {
-      text-align: left;
-    }
-    .info h1 { font-size: 22px; margin-bottom: 10px; }
-    .info p { margin: 6px 0; font-size: 16px; }
-    .info a {
-      display: inline-block;
-      margin-top: 10px;
-      padding: 8px 16px;
-      background: #ff69b4;
-      color: #fff;
-      text-decoration: none;
-      border-radius: 6px;
-      font-size: 16px;
-    }
-
-    /* 星星照片 */
-    .star {
-      position: absolute;
-      border-radius: 50%;
-      cursor: pointer;
-      transition: transform 0.3s;
-      box-shadow: 0 0 8px rgba(255,255,255,0.8);
-      animation: twinkle 2s infinite alternate;
-      z-index: 5;
-    }
-    .star:hover { transform: scale(1.3); }
-
-    /* 閃爍動畫 */
-    @keyframes twinkle {
-      from { opacity: 0.6; }
-      to { opacity: 1; }
-    }
-
-    /* 草地底部背景圖 (只佔底部 30%) */
-    .grass {
-      position: fixed;
-      bottom: 0;
-      width: 100%;
-      height: 30vh; /* 只佔畫面高度的 30% */
-      z-index: 10;
-      overflow: hidden;
-    }
-    .grass-bg {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-      display: block;
-    }
-
-    /* 全螢幕照片顯示 */
-    .fullscreen {
-      position: fixed;
-      top: 0; left: 0;
-      width: 100%; height: 100%;
-      background: rgba(0,0,0,0.9);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      z-index: 999;
-    }
-    .fullscreen img {
-      max-width: 90%;
-      max-height: 90%;
-    }
-
-    /* RWD 手機優先 */
-    @media (max-width: 768px) {
-      .info h1 { font-size: 18px; }
-      .info p, .info a { font-size: 14px; }
-      .logo-row { flex-direction: column; align-items: center; }
-      .info { text-align: center; }
-      .logo { width: 80px; }
-    }
-  </style>
+  <!-- 這裡只放基本設定，CSS 我們之後分開寫 -->
+  <link rel="stylesheet" href="style.css">
 </head>
 <body>
+
+  <!-- 背景星空 -->
+  <div class="background">
+    <img src="IMG/night_sky.jpg" class="sky-bg">
+  </div>
+
+  <!-- 星星牆 + 流星特效 (由 JS 動態生成) -->
 
   <!-- 名片區塊 -->
   <div class="card">
@@ -129,9 +29,10 @@
     </div>
   </div>
 
-  <!-- 草地底部背景圖 (30% 高度) -->
-  <div class="grass">
-    <img src="IMG/girl_grass_blend.jpg" class="grass-bg">
+  <!-- 前景少女 + 獨角獸 -->
+  <div class="foreground">
+    <img src="IMG/girl.png" class="character">
+    <img src="IMG/unicorn.png" class="character">
   </div>
 
   <!-- 全螢幕顯示容器 -->
@@ -139,88 +40,7 @@
     <img id="fullscreen-img" src="">
   </div>
 
-  <script>
-    // 照片清單 (放在 IMG 資料夾)
-    const photos = [];
-    for (let i = 1; i <= 45; i++) {
-      photos.push(`IMG/photo${i}.jpg`);
-    }
-
-    // 名片範圍
-    const card = document.querySelector('.card');
-    const rect = card.getBoundingClientRect();
-
-    // 隨機生成星星，避開名片範圍
-    photos.forEach(src => {
-      const star = document.createElement("img");
-      star.src = src;
-      star.className = "star";
-
-      const size = Math.floor(Math.random() * 40) + 30;
-      star.style.width = size + "px";
-
-      let top, left;
-      do {
-        top = Math.random() * window.innerHeight;
-        left = Math.random() * window.innerWidth;
-      } while (
-        top > rect.top && top < rect.bottom &&
-        left > rect.left && left < rect.right
-      );
-
-      star.style.top = top + "px";
-      star.style.left = left + "px";
-
-      const depth = Math.random();
-      star.style.opacity = 0.5 + depth * 0.5;
-      star.style.zIndex = Math.floor(depth * 5) + 1;
-
-      // ⭐ 隨機閃爍速度 (1.5s ~ 3s)
-      const duration = (Math.random() * 1.5 + 1.5).toFixed(1);
-      star.style.animation = `twinkle ${duration}s infinite alternate`;
-
-      // ⭐ 隨機顏色 (白、淡藍、淡黃)
-      const colors = ["#ffffff", "#aaccff", "#fff4c2"];
-      star.style.filter = `drop-shadow(0 0 6px ${colors[Math.floor(Math.random()*colors.length)]})`;
-
-      document.body.appendChild(star);
-
-      star.addEventListener("click", () => {
-        document.getElementById("fullscreen-img").src = src;
-        document.getElementById("fullscreen").style.display = "flex";
-      });
-    });
-
-    // 點擊全螢幕關閉
-    document.getElementById("fullscreen").addEventListener("click", () => {
-      document.getElementById("fullscreen").style.display = "none";
-    });
-
-    // 流星特效
-    function createMeteor() {
-      const meteor = document.createElement("div");
-      meteor.style.position = "fixed";
-      meteor.style.top = Math.random() * window.innerHeight * 0.4 + "px";
-      meteor.style.left = "-100px";
-      meteor.style.width = "2px";
-      meteor.style.height = "80px";
-      meteor.style.background = "white";
-      meteor.style.transform = "rotate(45deg)";
-      meteor.style.opacity = "0.9";
-      meteor.style.boxShadow = "0 0 12px rgba(255,255,255,0.8)";
-      meteor.style.transition = "all 1.5s linear";
-      meteor.style.zIndex = "999";
-      document.body.appendChild(meteor);
-
-      setTimeout(() => {
-        meteor.style.left = window.innerWidth + "px";
-        meteor.style.top = parseInt(meteor.style.top) + 200 + "px";
-        meteor.style.opacity = "0";
-      }, 50);
-
-      setTimeout(() => meteor.remove(), 2000);
-    }
-    setInterval(createMeteor, 8000);
-  </script>
+  <!-- JS 控制星星牆、流星特效 -->
+  <script src="script.js"></script>
 </body>
 </html>
