@@ -36,10 +36,10 @@
     <img id="fullscreen-img" src="">
   </div>
 
-  <!-- 星星牆與流星特效 -->
+  <!-- 星星牆特效 -->
   <script>
     const photos = [];
-    for (let i = 1; i <= 30; i++) { // ⭐ 數量減少到 30
+    for (let i = 1; i <= 30; i++) { // ⭐ 照片數量
       photos.push(`IMG/photo${i}.jpg`);
     }
 
@@ -70,15 +70,10 @@
       star.style.top = top + "px";
       star.style.left = left + "px";
 
-      const depth = Math.random();
-      star.style.opacity = 0.5 + depth * 0.5;
-      star.style.zIndex = Math.floor(depth * 5) + 1;
-
-      const duration = (Math.random() * 1.5 + 1.5).toFixed(1);
-      star.style.animation = `twinkle ${duration}s infinite alternate`;
-
-      const colors = ["#ffffff", "#aaccff", "#fff4c2"];
-      star.style.filter = `drop-shadow(0 0 6px ${colors[Math.floor(Math.random()*colors.length)]})`;
+      // ⭐ 隨機動畫時間與延遲
+      const duration = (Math.random() * 4 + 4).toFixed(1); // 4~8秒
+      const delay = (Math.random() * 5).toFixed(1); // 0~5秒
+      star.style.animation = `twinkleMove ${duration}s infinite ease-in-out ${delay}s`;
 
       document.body.appendChild(star);
 
@@ -91,22 +86,6 @@
     document.getElementById("fullscreen").addEventListener("click", () => {
       document.getElementById("fullscreen").style.display = "none";
     });
-
-    // ☄️ 流星特效 (CSS 控制動畫)
-    function createMeteor() {
-      const meteor = document.createElement("div");
-      meteor.className = "meteor";
-      meteor.style.top = Math.random() * window.innerHeight * 0.4 + "px";
-      document.body.appendChild(meteor);
-
-      setTimeout(() => meteor.remove(), 2200); // 移除時間比動畫稍長
-    }
-
-    // 🚀 載入時先跑一顆流星
-    createMeteor();
-
-    // 之後每 10 秒再跑一顆
-    setInterval(createMeteor, 10000);
   </script>
 </body>
 </html>
