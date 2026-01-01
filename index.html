@@ -59,8 +59,11 @@
         top = Math.random() * window.innerHeight;
         left = Math.random() * window.innerWidth;
       } while (
-        top > rect.top && top < rect.bottom &&
-        left > rect.left && left < rect.right
+        // 避開名片區塊
+        (top > rect.top && top < rect.bottom &&
+         left > rect.left && left < rect.right) ||
+        // 避開底部 30% (少女＋草地＋獨角獸區域)
+        top > window.innerHeight * 0.7
       );
 
       star.style.top = top + "px";
@@ -88,37 +91,36 @@
       document.getElementById("fullscreen").style.display = "none";
     });
 
-// 流星特效
-function createMeteor() {
-  const meteor = document.createElement("div");
-  meteor.style.position = "fixed";
-  meteor.style.top = Math.random() * window.innerHeight * 0.4 + "px";
-  meteor.style.left = "-100px";
-  meteor.style.width = "2px";
-  meteor.style.height = "80px";
-  meteor.style.background = "white";
-  meteor.style.transform = "rotate(45deg)";
-  meteor.style.opacity = "0.9";
-  meteor.style.boxShadow = "0 0 12px rgba(255,255,255,0.8)";
-  meteor.style.transition = "all 1.5s linear";
-  meteor.style.zIndex = "999";
-  document.body.appendChild(meteor);
+    // 流星特效
+    function createMeteor() {
+      const meteor = document.createElement("div");
+      meteor.style.position = "fixed";
+      meteor.style.top = Math.random() * window.innerHeight * 0.4 + "px";
+      meteor.style.left = "-100px";
+      meteor.style.width = "2px";
+      meteor.style.height = "80px";
+      meteor.style.background = "white";
+      meteor.style.transform = "rotate(45deg)";
+      meteor.style.opacity = "0.9";
+      meteor.style.boxShadow = "0 0 12px rgba(255,255,255,0.8)";
+      meteor.style.transition = "all 1.5s linear";
+      meteor.style.zIndex = "999";
+      document.body.appendChild(meteor);
 
-  setTimeout(() => {
-    meteor.style.left = window.innerWidth + "px";
-    meteor.style.top = parseInt(meteor.style.top) + 200 + "px";
-    meteor.style.opacity = "0";
-  }, 50);
+      setTimeout(() => {
+        meteor.style.left = window.innerWidth + "px";
+        meteor.style.top = parseInt(meteor.style.top) + 200 + "px";
+        meteor.style.opacity = "0";
+      }, 50);
 
-  setTimeout(() => meteor.remove(), 2000);
-}
+      setTimeout(() => meteor.remove(), 2000);
+    }
 
-// 🚀 載入時先跑一顆流星
-createMeteor();
+    // 🚀 載入時先跑一顆流星
+    createMeteor();
 
-// 之後每 10 秒再跑一顆
-setInterval(createMeteor, 10000);
+    // 之後每 10 秒再跑一顆
+    setInterval(createMeteor, 10000);
   </script>
 </body>
 </html>
-
