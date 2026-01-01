@@ -12,7 +12,7 @@
       overflow: hidden;
     }
 
-    /* 中央名片區塊 */
+    /* 名片區塊 */
     .card {
       position: absolute;
       top: 50%;
@@ -21,14 +21,28 @@
       background: rgba(255, 255, 255, 0.1);
       padding: 20px 40px;
       border-radius: 12px;
-      text-align: center;
       backdrop-filter: blur(6px);
-      z-index: 10;
+      z-index: 20;
       max-width: 90%;
     }
-    .card h1 { font-size: 22px; margin-bottom: 10px; }
-    .card p { margin: 6px 0; font-size: 16px; }
-    .card a {
+    .logo-row {
+      display: flex;
+      align-items: center;
+      gap: 20px;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+    .logo {
+      width: 100px;
+      height: auto;
+      border-radius: 50%;
+    }
+    .info {
+      text-align: left;
+    }
+    .info h1 { font-size: 22px; margin-bottom: 10px; }
+    .info p { margin: 6px 0; font-size: 16px; }
+    .info a {
       display: inline-block;
       margin-top: 10px;
       padding: 8px 16px;
@@ -47,6 +61,7 @@
       transition: transform 0.3s;
       box-shadow: 0 0 8px rgba(255,255,255,0.8);
       animation: twinkle 2s infinite alternate;
+      z-index: 5;
     }
     .star:hover { transform: scale(1.3); }
 
@@ -62,7 +77,7 @@
       bottom: 0;
       width: 100%;
       height: auto;
-      z-index: 5;
+      z-index: 10;
       overflow: hidden;
     }
     .grass-bg {
@@ -90,24 +105,31 @@
 
     /* RWD 手機優先 */
     @media (max-width: 768px) {
-      .card h1 { font-size: 18px; }
-      .card p, .card a { font-size: 14px; }
-      .grass-bg { height: auto; }
+      .info h1 { font-size: 18px; }
+      .info p, .info a { font-size: 14px; }
+      .logo-row { flex-direction: column; align-items: center; }
+      .info { text-align: center; }
+      .logo { width: 80px; }
     }
   </style>
 </head>
 <body>
 
-  <!-- 中央名片 -->
+  <!-- 名片區塊 -->
   <div class="card">
-    <h1>萱恩居家清潔·收納整理師</h1>
-    <p>居家清潔 · 收納整理 · 環境維護</p>
-    <p>LINE ID：chanel800219</p>
-    <p>電話：0976986219</p>
-    <a href="https://line.me/ti/p/8v7FZWnguS">加我的 LINE</a>
+    <div class="logo-row">
+      <img src="IMG/logo_clean.jpg" class="logo">
+      <div class="info">
+        <h1>萱恩居家清潔·收納整理師</h1>
+        <p>居家清潔 · 收納整理 · 環境維護</p>
+        <p>LINE ID：chanel800219</p>
+        <p>電話：0976986219</p>
+        <a href="https://line.me/ti/p/8v7FZWnguS">加我的 LINE</a>
+      </div>
+    </div>
   </div>
 
-  <!-- 草地底部背景圖（漸層融合版） -->
+  <!-- 草地底部背景圖 -->
   <div class="grass">
     <img src="IMG/girl_grass_blend.jpg" class="grass-bg">
   </div>
@@ -124,30 +146,37 @@
       photos.push(`IMG/photo${i}.jpg`);
     }
 
-    // 隨機生成星星
+    // 名片範圍
+    const card = document.querySelector('.card');
+    const rect = card.getBoundingClientRect();
+
+    // 隨機生成星星，避開名片範圍
     photos.forEach(src => {
       const star = document.createElement("img");
       star.src = src;
       star.className = "star";
 
-      // 隨機大小 (30~60px)
-      const size = Math.floor(Math.random() * 40) + 20;
+      const size = Math.floor(Math.random() * 40) + 30;
       star.style.width = size + "px";
 
-      // 隨機位置
-      const top = Math.random() * window.innerHeight;
-      const left = Math.random() * window.innerWidth;
+      let top, left;
+      do {
+        top = Math.random() * window.innerHeight;
+        left = Math.random() * window.innerWidth;
+      } while (
+        top > rect.top && top < rect.bottom &&
+        left > rect.left && left < rect.right
+      );
+
       star.style.top = top + "px";
       star.style.left = left + "px";
 
-      // 遠近分層 (透明度 & z-index)
       const depth = Math.random();
       star.style.opacity = 0.5 + depth * 0.5;
       star.style.zIndex = Math.floor(depth * 5) + 1;
 
       document.body.appendChild(star);
 
-      // 點擊放大
       star.addEventListener("click", () => {
         document.getElementById("fullscreen-img").src = src;
         document.getElementById("fullscreen").style.display = "flex";
@@ -159,19 +188,20 @@
       document.getElementById("fullscreen").style.display = "none";
     });
 
-    // 流星特效 (每10秒)
+    // 流星特效
     function createMeteor() {
       const meteor = document.createElement("div");
       meteor.style.position = "fixed";
-      meteor.style.top = Math.random() * window.innerHeight + "px";
+      meteor.style.top = Math.random() * window.innerHeight * 0.4 + "px";
       meteor.style.left = "-100px";
       meteor.style.width = "2px";
       meteor.style.height = "80px";
       meteor.style.background = "white";
       meteor.style.transform = "rotate(45deg)";
-      meteor.style.opacity = "0.8";
-      meteor.style.transition = "all 2s linear";
-      meteor.style.zIndex = "1";
+      meteor.style.opacity = "0.9";
+      meteor.style.boxShadow = "0 0 12px rgba(255,255,255,0.8)";
+      meteor.style.transition = "all 1.5s linear";
+      meteor.style.zIndex = "999";
       document.body.appendChild(meteor);
 
       setTimeout(() => {
@@ -180,10 +210,9 @@
         meteor.style.opacity = "0";
       }, 50);
 
-      setTimeout(() => meteor.remove(), 2500);
+      setTimeout(() => meteor.remove(), 2000);
     }
-    setInterval(createMeteor, 10000);
+    setInterval(createMeteor, 8000);
   </script>
 </body>
 </html>
-
