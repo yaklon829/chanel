@@ -110,6 +110,29 @@ body {
   max-height: 90%;
 }
 
+/* ☄️ 流星特效 */
+.meteor {
+  position: absolute;
+  width: 2px;
+  height: 100px;
+  background: linear-gradient(to bottom, rgba(255,255,255,1), rgba(255,255,255,0));
+  transform: rotate(45deg);
+  animation: fall 2s linear forwards;
+  box-shadow: 0 0 8px rgba(255,255,255,0.8);
+  z-index: 9999;
+}
+
+@keyframes fall {
+  from {
+    transform: translate(-100px, 0) rotate(45deg);
+    opacity: 1;
+  }
+  to {
+    transform: translate(100vw, 200px) rotate(45deg);
+    opacity: 0;
+  }
+}
+
 /* 手機 RWD */
 @media (max-width: 768px) {
   .info h1 { font-size: 18px; }
