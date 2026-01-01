@@ -6,7 +6,7 @@
   <style>
     body {
       margin: 0;
-      background: radial-gradient(ellipse at center, #0b0c10 0%, #000000 100%);
+      background: linear-gradient(to bottom, #0b1d4d 0%, #000000 100%);
       color: #fff;
       font-family: "Noto Sans TC", sans-serif;
       overflow: hidden;
@@ -24,9 +24,10 @@
       text-align: center;
       backdrop-filter: blur(6px);
       z-index: 10;
+      max-width: 90%;
     }
-    .card h1 { font-size: 24px; margin-bottom: 10px; }
-    .card p { margin: 6px 0; }
+    .card h1 { font-size: 22px; margin-bottom: 10px; }
+    .card p { margin: 6px 0; font-size: 16px; }
     .card a {
       display: inline-block;
       margin-top: 10px;
@@ -35,6 +36,7 @@
       color: #fff;
       text-decoration: none;
       border-radius: 6px;
+      font-size: 16px;
     }
 
     /* 星星照片 */
@@ -44,8 +46,15 @@
       cursor: pointer;
       transition: transform 0.3s;
       box-shadow: 0 0 8px rgba(255,255,255,0.8);
+      animation: twinkle 2s infinite alternate;
     }
     .star:hover { transform: scale(1.3); }
+
+    /* 閃爍動畫 */
+    @keyframes twinkle {
+      from { opacity: 0.6; }
+      to { opacity: 1; }
+    }
 
     /* 草地底部 */
     .grass {
@@ -63,7 +72,7 @@
       bottom: 0;
       left: 50%;
       transform: translateX(-50%);
-      height: 200px;
+      height: 180px;
       z-index: 6;
     }
 
@@ -81,6 +90,13 @@
     .fullscreen img {
       max-width: 90%;
       max-height: 90%;
+    }
+
+    /* RWD 手機優先 */
+    @media (max-width: 768px) {
+      .card h1 { font-size: 18px; }
+      .card p, .card a { font-size: 14px; }
+      .girl { height: 120px; }
     }
   </style>
 </head>
@@ -106,13 +122,10 @@
 
   <script>
     // 照片清單 (放在 IMG 資料夾)
-    const photos = [
-      "IMG/photo1.jpg",
-      "IMG/photo2.jpg",
-      "IMG/photo3.jpg",
-      "IMG/photo4.jpg",
-      "IMG/photo5.jpg"
-    ];
+    const photos = [];
+    for (let i = 1; i <= 45; i++) {
+      photos.push(`IMG/photo${i}.jpg`);
+    }
 
     // 隨機生成星星
     photos.forEach(src => {
@@ -124,11 +137,16 @@
       const size = Math.floor(Math.random() * 40) + 30;
       star.style.width = size + "px";
 
-      // 隨機位置 (避免中央名片區塊)
+      // 隨機位置
       const top = Math.random() * window.innerHeight;
       const left = Math.random() * window.innerWidth;
       star.style.top = top + "px";
       star.style.left = left + "px";
+
+      // 遠近分層 (透明度 & z-index)
+      const depth = Math.random();
+      star.style.opacity = 0.5 + depth * 0.5;
+      star.style.zIndex = Math.floor(depth * 5) + 1;
 
       document.body.appendChild(star);
 
